@@ -56,6 +56,8 @@ def Calc_sate_pos(ep,obs,nav,res,X,TAG):
         
         i=TAG['s2n'][S]
         #TAG中系统对应的序号
+        #print(i,X)
+        
         rec_clk=X[3+i,0]/c
         #自行选择对应系统的钟差
         
@@ -231,7 +233,7 @@ def Standard_point_positioning(obs,nav,TAG):
         #本历元所有可用卫星
         if(res.all_sate_num[-1]<4):
         #卫星数不够
-            print(f'not enough sate ({res.sate_num[-1]}) at epoch {ep}')
+            print('not enough sate (%s) at epoch %s'%({res.sate_num[-1]},ep))
             #f->{}中内容字符转变量输出
             res.add_station_xyz(np.nan,np.nan,np.nan)
             #测站坐标解不出来

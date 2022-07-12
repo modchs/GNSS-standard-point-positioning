@@ -20,7 +20,7 @@ def Check_Tag(x):
     
     for s in x['sys']:
     #检查系统名称
-        assert s in ALL_SYS,f'unknown system {s}'
+        assert s in ALL_SYS,'unknown system %s'%(s)
     
     assert x['combination'] in ['std','ionofree'],'unknown combination'
     #检查组合方式
@@ -31,7 +31,7 @@ def Check_Tag(x):
     for s in x['sys']:
     #检查频点
         for f in x['var'][s]:
-            assert f in ALL_VAR,f'unknown var {f}'
+            assert f in ALL_VAR,'unknown var %s'%f
     
     if(x['combination']=='ionofree'):
     #无电离层组合频段不够
@@ -49,13 +49,13 @@ TAG={
      #精密星历文件名
      'clk_file_path':'./input/wum21124.clk',
      #精密钟差文件名
-     'sys':['E','C','G'],
-     #多系统 -> 'G','C','R','E'
+     'sys':['G'],
+     #多系统 -> 'G','C','E'
      's2n':{},
      #为了多系统钟差X和索引转换将GREC转为数字/根据选取的系统排列 
      'PRN':[],
      #以sys为准，列出多系统下所有可能的卫星
-     'combination':'std',
+     'combination':'ionofree',
      #combination 组合 -> std/ionofree
      'power':'piecewise',
      #power 卫星加权方式 -> equal/sin2/piecewise

@@ -142,7 +142,11 @@ class NAV:
     #寻找合适的导航星历 返回下标
     #prn卫星编号 week,sec为对应prn所属的系统的周秒
     #遍历所有时间 求差值绝对值 选最小的 不能直接判断<1h 有个别情况第一个历元从2h开始 0h无法得出结果
-        S=prn[0]
+        if type(prn)==str:
+            S=prn[0]
+        else:
+            S='G'
+            prn='G'+'%02d'%prn
         #卫星所属的系统
         now_time=week*7*24.0+sec/3600.0
         #转换成小时更方便
@@ -158,7 +162,7 @@ class NAV:
                 if abs(obs_time-now_time)<dt:
                     dt=abs(obs_time-now_time)
                     index=i
-        assert index!=-1,f'find nav index failed prn={prn} time={sec}'
+        assert index!=-1,'find nav index failed prn=%s time=%s'%(prn,sec)
         #查找失败
         return index
     
@@ -166,6 +170,9 @@ class NAV:
     #计算卫星三维坐标
     #prn卫星编号 index导航星历第二下标(要使用哪个时刻的导航星历)
     #注意I和i要区别
+        if type(p)==int:
+            p='G'+'%02d'%p
+    
         dt=sec-self.toe[p][I]
         #如果想要长时间序列解算 dt必须考虑周#********************************************************
         #dt=t_GPS_sec-nav_GPS_sec+(t_GPS_week-nav_GPS_week)*7.0*24.0*3600.0

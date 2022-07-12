@@ -6,7 +6,7 @@ Created on Thu Feb 25 10:24:11 2021
 
 OBS_FILE.py:读O文件 多系统:G/C
 
-下一步优化：多系统根据使用要求来读取，不用全部输入
+优化：多系统根据使用要求来读取，不用全部输入
 """
 from CONSTANT import PRN,ALL_SYS,VAR,ALL_VAR
 from FUNC import XYZ2BLH

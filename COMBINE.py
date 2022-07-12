@@ -80,8 +80,8 @@ def Calc_Bl_2(ep,obs,nav,clk,res,X,TAG):
     #B,l矩阵初始化
     Ele,Azi=res.Ele[-1],res.Azi[-1]
     #高度角方位角
-    v1=TAG['var'][0]
-    if(len(TAG['combination'])>1):v2=TAG['var'][1]
+    v1=TAG['var']['G'][0]
+    if(len(TAG['combination'])>1):v2=TAG['var']['G'][1]
     #使用的频点名
     
     n=freq[v1]**2/(freq[v1]**2-freq[v2]**2)
@@ -99,8 +99,8 @@ def Calc_Bl_2(ep,obs,nav,clk,res,X,TAG):
         B[i,2]=(X[2,0]-sz[i])/r
         B[i,3]=-1
         
-        new_GPS_week=obs.GPS_week[ep]
-        new_GPS_sec=obs.GPS_sec[ep]
+        new_GPS_week=obs.T.Week['G'][ep]
+        new_GPS_sec=obs.T.Sec['G'][ep]
 
         if(TAG['eph']=='sp3' and new_GPS_sec<=clk.GPS_sec[-1]):
         #使用精密钟差
@@ -110,7 +110,8 @@ def Calc_Bl_2(ep,obs,nav,clk,res,X,TAG):
         #使用导航星历
             index=nav.find_nav_index(prn,new_GPS_week,new_GPS_sec)
             #搜索最近的导航星历下标index
-            week,sec=nav.GPS_week[prn][index],nav.GPS_sec[prn][index]
+            #week,sec=nav.GPS_week[prn][index],nav.GPS_sec[prn][index]
+            week,sec=nav.T[prn].Week['G'][index],nav.T[prn].Sec['G'][index]
             #获取导航星历时刻的GPS时
             dt=new_GPS_sec-sec+(new_GPS_week-week)*7*24*3600.0
             #考虑GPS周项 不过对单天解无影响
@@ -144,19 +145,19 @@ def Calc_Bl_2(ep,obs,nav,clk,res,X,TAG):
 
 def Single_point_positioning(obs,nav,sp3,clk,TAG):
 #单点定位 输入:一个观测类和一个导航电文类
-    
     res=RES(obs)
     #res 结果类
     for ep in range(obs.epoch_num):
     #对每一个历元单独平差解坐标和钟差
         Show_schedule(ep,obs.epoch_num)
         #进度条
-        all_sate=Calc_all_sate(ep,obs,var=TAG['var'])
+        all_sate=Calc_all_sate(ep,obs,TAG)
+        
         res.add_sate(all_sate)
         #本历元所有可用卫星
-        if(res.sate_num[-1]<4):
+        if(res.sate_num['G'][-1]<4):
         #卫星数不够
-            print(f'not enough sate at epoch {ep}')
+            print('not enough sate at epoch %s'%ep)
             #f->{}中内容字符转变量输出
             res.add_station_xyz(np.nan,np.nan,np.nan)
             #测站坐标解不出来
@@ -174,7 +175,7 @@ def Single_point_positioning(obs,nav,sp3,clk,TAG):
         while(1):
         #迭代计算四参数
             if(TAG['eph']=='nav'):
-                sx,sy,sz=Calc_sate_pos(ep,obs,nav,res,X[3,0]/c,TAG)
+                sx,sy,sz=Calc_sate_pos(ep,obs,nav,res,X,TAG)
             elif(TAG['eph']=='sp3'):
                 sx,sy,sz=Calc_sate_pos_2(ep,obs,nav,sp3,clk,res,X[3,0]/c,TAG)
             res.update_sate_xyz(sx,sy,sz)

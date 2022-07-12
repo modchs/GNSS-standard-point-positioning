@@ -52,7 +52,7 @@ class SP3:
             self.fx[prn]=interp1d(self.GPS_sec,self.x[prn],kind=self.Kind)
             self.fy[prn]=interp1d(self.GPS_sec,self.y[prn],kind=self.Kind)
             self.fz[prn]=interp1d(self.GPS_sec,self.z[prn],kind=self.Kind)
-            print(f'{prn} sp3 ok')
+            print('%s sp3 ok'%prn)
             #暂时只用GPS秒插值 可用于一周内的解
             #拉格朗日插值 存在问题 
             #根据实验 kind=7 能达到比较好的效果

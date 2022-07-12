@@ -218,7 +218,7 @@ class RES:
         #绘制ENU图表
             
             plt.ylabel('ENU/m')
-            plt.ylim(-20,20)
+            plt.ylim(-5,5)
             
             plt.plot(self.h[0:n],self.e,color='m',label='E',linewidth=1)
             plt.plot(self.h[0:n],self.n,color='c',label='N',linewidth=1)

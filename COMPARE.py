@@ -14,7 +14,8 @@ from CORRECT import Relative_eff_corr as REC
 def Compare_sp3_nav(prn,nav,sp3,interval):
 #比较精密星历和导航星历的差异 卫星编号prn
 #nav 导航电文 sp3 精密星历 interval 间隔
-    
+    S=str(prn[0])
+    prn=int(prn[1:])
     dx,dy,dz=[],[],[]
     #两者插值 
     GPS_time,hour_time=[],[]
@@ -28,6 +29,8 @@ def Compare_sp3_nav(prn,nav,sp3,interval):
     #指定内插阶数 内插函数
     #kind 次数的选择？ 越大越好? 7 9 11 区别不明显 >3时偶数不行?
     
+    prn=S+'%02d'%prn
+    
     week=sp3.GPS_week[0]
     #单天解 可以不考虑GPS周的影响
     
@@ -38,6 +41,7 @@ def Compare_sp3_nav(prn,nav,sp3,interval):
         hour_time.append((i-sp3.GPS_sec[0])/3600.0)
         
         index=nav.find_nav_index(prn,week,i)
+        print(prn)
         tmpx,tmpy,tmpz=nav.Calc_sate_pos_nav(prn,index,week,i)
         
         dx.append(tmpx-fx(i))
@@ -45,10 +49,10 @@ def Compare_sp3_nav(prn,nav,sp3,interval):
         dz.append(tmpz-fz(i))
     
     plt.figure(1, (10, 6))
-    plt.scatter(hour_time,dx,color='r',s=2)
-    plt.scatter(hour_time,dy,color='g',s=2)
-    plt.scatter(hour_time,dz,color='c',s=2)
-    
+    plt.scatter(hour_time,dx,color='r',s=2,label='dx')
+    plt.scatter(hour_time,dy,color='g',s=2,label='dy')
+    plt.scatter(hour_time,dz,color='c',s=2,label='dz')
+    plt.legend()
     plt.title('prn:'+str(prn)+' sp3 vs nav')
     plt.ylabel('delta/m')
     plt.xlabel('time/h')
@@ -72,6 +76,8 @@ def compare_eph_new(prn,nav,sp3):
     week=sp3.GPS_week[0]
     #单天解 可以不考虑GPS周的影响
     
+    prn=int(prn[1:])
+    
     for i in range(len(sp3.GPS_sec)):
         hour_time.append((sp3.GPS_sec[i]-sp3.GPS_sec[0])/3600.0)
         
@@ -83,13 +89,15 @@ def compare_eph_new(prn,nav,sp3):
         dz.append(tmpz-sp3.z[prn][i])
     
     plt.figure(1, (10, 6))
-    plt.scatter(hour_time,dx,color='g',s=20)
-    plt.scatter(hour_time,dy,color='c',s=20)
-    plt.scatter(hour_time,dz,color='r',s=20)
-    
+    plt.scatter(hour_time,dx,color='g',s=20,label='dx')
+    plt.scatter(hour_time,dy,color='c',s=20,label='dy')
+    plt.scatter(hour_time,dz,color='r',s=20,label='dz')
+    plt.legend()
     plt.title('prn:'+str(prn)+' sp3 vs nav')
     plt.ylabel('delta/m')
     plt.xlabel('time/h')
+    
+    plt.tight_layout()
     
     plt.xlim(0,24)
     #设置横轴范围
@@ -103,7 +111,8 @@ def compare_eph_new(prn,nav,sp3):
 
 
 def Compare_clk_nav(prn,nav,clk):
-#不内插 只画30sec间隔    
+#不内插 只画30sec间隔
+    S = prn[0]
     delta=[]
     hour_time=[]
     #GPS时用于内插 单天小时计时用于画图
@@ -114,18 +123,27 @@ def Compare_clk_nav(prn,nav,clk):
         hour_time.append((clk.GPS_sec[i]-clk.GPS_sec[0])/3600.0)
         
         index=nav.find_nav_index(prn,week,clk.GPS_sec[i])
-        dt=clk.GPS_sec[i]-nav.GPS_sec[prn][index]
+        #dt=clk.GPS_sec[i]-nav.GPS_sec[prn][index]
+        
+        dt=clk.GPS_sec[i]-nav.T[prn].Sec[S][index]
         
         nav_t=nav.a0[prn][index]+nav.a1[prn][index]*dt+nav.a2[prn][index]*(dt**2)
         #nav_t+=REC(nav,prn,index,week,clk.GPS_sec[i])
         #print(nav_t-clk.t[prn][i])
+        
+        prn=int(prn[1:])
+        
         delta.append((nav_t-clk.t[prn][i])*c)
+        
+        prn=S+'%02d'%prn
     
     plt.figure(2, (10, 6))
-    plt.scatter(hour_time,delta,color='r',s=2);
+    plt.scatter(hour_time,delta,color='r',s=2,label='clk-nav');
     plt.title('clk vs nav')
     plt.ylabel('delta/m')
     plt.xlabel('time/h')
+    plt.legend()
+    plt.tight_layout()
     
     plt.ylim(-1,1)
     plt.xlim(0,24)
