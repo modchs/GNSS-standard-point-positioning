@@ -1,2 +1,2 @@
 # GNSS standard point positioning (spp)
-A fully commented python3 code for multi-GNSS standard point positioning
+python3 code for multi-GNSS standard point positioning which are fully commented in chinese
