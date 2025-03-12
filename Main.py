@@ -23,10 +23,10 @@ def Compare(tag):
     sp3=SP3(tag['sp3_file_path'])
     clk=CLK(tag['clk_file_path'])
     
-    prn=1
+    prn='G32'
     
     Compare_sp3_nav(prn,nav,sp3,30)
-    compare_eph_new(prn,nav,sp3)
+    #compare_eph_new(prn,nav,sp3)
     Compare_clk_nav(prn,nav,clk)
     
     print('comparison ok')
@@ -65,7 +65,7 @@ def SPP2(tag):
     
     res.Plot('ENU',tag)
     #res.Plot('sate',tag)
-    res.Print('RMS')
+    #res.Print('RMS')
     
     print('main spp2 ok')
     
@@ -73,9 +73,7 @@ if __name__=="__main__":
 
     Check_Tag(TAG)
     #print(TAG)
+    #SPP2(TAG)
     SPP(TAG)
-    
     #Compare(TAG)
     print('main ok')
-    
-    

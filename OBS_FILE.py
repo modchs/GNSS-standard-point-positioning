@@ -139,7 +139,10 @@ class OBS:
                         self.L1C[prn][-1]=str2f(data[i+j][20:35])
                         #L1C位置相同
                         #下标[-1]覆盖默认值0或np.nan
-                        if(self.version=='3.02'):
+                        if self.version=='3.01':
+                            self.C1C[prn][-1]=str2f(data[i+j][5:19])
+                            self.C2W[prn][-1]=str2f(data[i+j][21:35])
+                        elif(self.version=='3.02'):
                             self.C1C[prn][-1]=str2f(data[i+j][5:19])
                             self.C2W[prn][-1]=str2f(data[i+j][53:67])
                             #读取L1 数字相比C1多1位 14/15

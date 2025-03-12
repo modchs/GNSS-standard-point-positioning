@@ -218,12 +218,14 @@ class RES:
         #绘制ENU图表
             
             plt.ylabel('ENU/m')
-            plt.ylim(-5,5)
+            #plt.ylim(-5,5)
             
             plt.plot(self.h[0:n],self.e,color='m',label='E',linewidth=1)
             plt.plot(self.h[0:n],self.n,color='c',label='N',linewidth=1)
             plt.plot(self.h[0:n],self.u,color='r',label='U',linewidth=1)
             #控制t的长度 可以显示任意长度的结果
+            plt.legend()
+            plt.savefig('ENU.png')
             
         if(obj=='sate' or obj=='SATE'): 
         #绘制卫星数图表
@@ -241,6 +243,7 @@ class RES:
                 plt.plot(self.h[0:n],self.sate_num['E'],color='c',label='E',linewidth=1)
             
             plt.legend()
+            plt.savefig('sate.png')
             
         if(obj=='DOP' or obj=='dop'):
         #DOP
@@ -251,6 +254,7 @@ class RES:
             plt.plot(self.h[0:n],self.TDOP,color='c',label='TDOP',linewidth=1)
             plt.plot(self.h[0:n],self.GDOP,color='r',label='GDOP',linewidth=1)
             #控制t的长度 可以显示任意长度的结果
+            plt.legend() #图例
+            plt.savefig('dop.png')
             
-        plt.legend()
-        #图例   
+        

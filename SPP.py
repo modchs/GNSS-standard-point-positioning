@@ -223,6 +223,7 @@ def Standard_point_positioning(obs,nav,TAG):
     #for ep in range(0,1):
     for ep in range(obs.epoch_num):
     #对每一个O文件历元单独平差解测站坐标和钟差
+        #print(ep) # !chs
         
         #print('obstime:',obs.hour[ep],obs.minu[ep],obs.sec[ep])
         Show_schedule(ep,obs.epoch_num)

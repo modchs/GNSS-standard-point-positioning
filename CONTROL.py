@@ -40,22 +40,20 @@ def Check_Tag(x):
 TAG={
 #标签
      'obs_file_path':'./input/falk1840.20o',
-     #'obs_file_path':'./input/T4300.65o',
      #O文件名
      'nav_file_path':'./input/brdm1840.20p',
-     #'nav_file_path':'./input/T43000HKG_R_20203650000_01D_GN.rnx',
      #N文件名
      'sp3_file_path':'./input/wum21124.sp3',
      #精密星历文件名
      'clk_file_path':'./input/wum21124.clk',
      #精密钟差文件名
-     'sys':['G'],
+     'sys':['G','C','E'],
      #多系统 -> 'G','C','E'
      's2n':{},
      #为了多系统钟差X和索引转换将GREC转为数字/根据选取的系统排列 
      'PRN':[],
      #以sys为准，列出多系统下所有可能的卫星
-     'combination':'ionofree',
+     'combination':'std',
      #combination 组合 -> std/ionofree
      'power':'piecewise',
      #power 卫星加权方式 -> equal/sin2/piecewise
@@ -84,7 +82,7 @@ for i,s in enumerate(TAG['sys']):
     TAG['s2n'][s]=i
 
 if(TAG['combination']=='std'):
-    TAG['var']['G']=['C1W']
+    TAG['var']['G']=['C2W']
     TAG['var']['C']=['C2I']
     TAG['var']['E']=['C1C']
 #选择非组合所使用的频点

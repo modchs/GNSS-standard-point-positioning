@@ -24,3 +24,6 @@ def Saastamoinen(E):
     ds=0.002277/sin(E+dE)*(Ps+(1255/Ts+0.05)*es-1.16/(tan(E)**2))
     
     return ds
+
+
+print(Saastamoinen(pi/2.0))
